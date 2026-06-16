@@ -1,0 +1,107 @@
+{
+ "keyword": "silverswap",
+ "h1": "SilverSwap",
+ "brand": "SilverSwap",
+ "niche": "swap",
+ "verb": "Swap",
+ "title": "SilverSwap - Open App",
+ "meta_description": "silverswap opens the swap app for wallet-based token exchanges; verify the GitHub Pages domain before connecting.",
+ "palette": {
+  "mode": "dark",
+  "bg": "#0B0D10",
+  "accent": "#C0C0C0",
+  "ink": "#F5F7FA"
+ },
+ "hero_h2": "Open the token exchange app from the verified destination",
+ "hero_lead": "silverswap is the app destination for opening a wallet-based token swap flow from the verified GitHub Pages domain.",
+ "badge": "Swap App",
+ "widget": {
+  "from": "TOKEN",
+  "from_net": "Wallet network",
+  "to": "TOKEN",
+  "to_net": "Wallet network",
+  "action": "Open SilverSwap App"
+ },
+ "trust": [
+  "Official app link",
+  "GitHub Pages domain",
+  "No APY claims"
+ ],
+ "what_is": "SilverSwap is a swap app destination hosted at the provided official GitHub Pages URL, built to route users into a wallet-based exchange flow. For wallet safety basics, review <a href='https://ethereum.org/en/wallets/'>ethereum.org wallets</a> before connecting.",
+ "how": [
+  {
+   "t": "Open the app",
+   "d": "Use the official URL and confirm the browser shows silverswap-app.github.io before interacting."
+  },
+  {
+   "t": "Connect a wallet",
+   "d": "Choose the wallet and network you intend to use, then read the connection prompt carefully."
+  },
+  {
+   "t": "Select assets",
+   "d": "Pick the token you want to send and the token you want to receive in the swap interface."
+  },
+  {
+   "t": "Review and sign",
+   "d": "Check token amounts, network, address, and wallet request details before approving any transaction."
+  }
+ ],
+ "points": [
+  {
+   "h": "Official destination",
+   "p": "The page points visitors directly to the official app URL instead of sending them through a generic search result."
+  },
+  {
+   "h": "Wallet-first flow",
+   "p": "Users stay in control of approvals and signatures through their own wallet; network activity can be checked with tools such as <a href='https://etherscan.io/'>Etherscan</a> when using Ethereum."
+  },
+  {
+   "h": "Clean swap intent",
+   "p": "The content focuses on opening the app, selecting assets, and verifying transaction details without unsupported claims about fees, APY, audits, or liquidity."
+  }
+ ],
+ "eeat": [
+  {
+   "text": "Official app",
+   "url": "https://silverswap-app.github.io/"
+  },
+  {
+   "text": "Ethereum wallets",
+   "url": "https://ethereum.org/en/wallets/"
+  },
+  {
+   "text": "Etherscan",
+   "url": "https://etherscan.io/"
+  }
+ ],
+ "faq": [
+  {
+   "q": "What is silverswap?",
+   "a": "silverswap is presented here as the branded destination for opening the SilverSwap token swap app at the official GitHub Pages URL.",
+   "open": true
+  },
+  {
+   "q": "Is silverswap the official app?",
+   "a": "The official app URL provided for this page is <a href='https://silverswap-app.github.io/'>https://silverswap-app.github.io/</a>; verify that domain before connecting a wallet.",
+   "open": false
+  },
+  {
+   "q": "How do I use silverswap safely?",
+   "a": "Open the official domain, connect only the wallet you intend to use, inspect token amounts and approvals, and sign only after reviewing the wallet prompt.",
+   "open": false
+  },
+  {
+   "q": "Does silverswap publish fees or APY here?",
+   "a": "No fee, APY, audit, liquidity, or performance claim is made on this landing page; rely on the live app and wallet transaction details for current execution data.",
+   "open": false
+  },
+  {
+   "q": "Where should I open silverswap?",
+   "a": "Open silverswap only from the official app URL and avoid lookalike domains, ads, or copied links from unverified sources.",
+   "open": false
+  }
+ ],
+ "official_url": "https://silverswap-app.github.io/",
+ "official_domain": "silverswap-app.github.io",
+ "footer_note": "Not the official app; verify the domain before connecting a wallet. Educational content only, not financial advice."
+}
