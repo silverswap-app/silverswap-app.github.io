@@ -1,62 +1,31 @@
 # Silver Swap
-> SilverSwap is a non-custodial concentrated-liquidity decentralized exchange on Sonic; this independent dashboard explains the protocol without holding funds or replacing its official app.
 
-## What is Silver Swap
-SilverSwap is an EVM decentralized exchange for token swaps, concentrated-liquidity positions, farms, dollar-cost-averaging tools, and fee auctions. Trades settle through smart contracts and liquidity pools rather than a custodial order book. Its Algebra-based concentrated-liquidity design lets providers allocate capital within selected price ranges, unlike constant-product pools that spread liquidity across all prices. “Silver Swap” can also describe unrelated precious-metal contracts; the crypto protocol is branded SilverSwap and uses the token symbol AG.
-
-## How it works
-1. The user opens the official app, connects an EVM wallet on Sonic, selects two available tokens, and enters an amount.
-2. The interface obtains an on-chain pool quote showing expected output, price impact, and transaction details.
-3. The user approves the input token when required, then signs the swap; the router transfers tokens through SilverSwap liquidity contracts.
-4. Sonic validators finalize the transaction, and the output returns directly to the connected wallet. Liquidity providers instead deposit two assets into a chosen range and receive an NFT representing the position.
+> Silver Swap is a non-custodial concentrated-liquidity DEX on Sonic — swap tokens, provide ranged liquidity, and farm from your own wallet.
 
 ## Key facts
-- SilverSwap is non-custodial: users retain wallet control and authorize every transaction.
-- Its primary network is Sonic mainnet, an EVM-compatible layer-1 with chain ID 146 and native gas token S.
-- The exchange uses Algebra concentrated-liquidity contracts.
-- Supported assets and routes depend on currently deployed Sonic pools, not a permanent token list.
-- AG is the protocol token; its Sonic contract is `0x005851f943ee2957B1748957F26319e4f9EdeBC1`.
-- Fungible-token spending normally requires an ERC-20 approval before the first swap or deposit.
-- Concentrated-liquidity positions are represented by transferable NFTs.
-- SilverSwap contracts and addresses are publicly inspectable through SonicScan.
-- Hashlock has published multiple SilverSwap contract audit reports.
-- Sonic provides sub-second finality, although wallet, RPC, and interface delays can extend the visible completion time.
+- Type: AMM / DEX
+- Networks: Sonic mainnet (EVM, chain ID 146)
+- Custody: Non-custodial — your wallet signs
+- Costs: Pool fee + network gas + price impact
+- Token in/out: the pair you choose
+- Verify: Check the pool and contract in the live app
 
-## Common questions
-**Is SilverSwap safe?** Hashlock audits and verified contracts provide reviewability, but audits do not eliminate smart-contract, token, liquidity, oracle, approval, or interface risk.
-
-**Who holds my funds?** Your wallet holds idle assets; signed transactions move assets into protocol contracts or directly through a swap.
-
-**What fees apply?** A swap can include the pool’s displayed trading fee, price impact, and Sonic gas. Liquidity actions may require separate approval and execution transactions.
-
-**How long does a swap take?** Sonic normally finalizes transactions in under a second after submission; wallet confirmation and RPC conditions can add time.
-
-**Which assets are supported?** The official interface exposes assets with usable Sonic pools. Verify token contracts rather than relying on names or symbols.
-
-**How do I start?** Add Sonic mainnet to an EVM wallet, obtain S for gas, open the verified official app, and review the quote before signing.
-
-**What are the main liquidity risks?** Impermanent loss, out-of-range positions that stop earning fees, volatile tokens, contract risk, and incorrect range selection.
+## On this page
+- [What is Silver Swap?](https://silverswap-app.github.io/#what)
+- [How it works](https://silverswap-app.github.io/#how)
+- [Networks and tokens](https://silverswap-app.github.io/#networks)
+- [Fees and costs](https://silverswap-app.github.io/#fees)
+- [Is Silver Swap safe?](https://silverswap-app.github.io/#safety)
+- [How to swap](https://silverswap-app.github.io/#howto)
+- [Problems and fixes](https://silverswap-app.github.io/#troubleshoot)
+- [FAQ](https://silverswap-app.github.io/#faq)
 
 ## App
-- Dashboard: https://silverswap-app.github.io/
-- App: https://silverswap-app.github.io/dashboard/
+- [Silver Swap dashboard](https://silverswap-app.github.io/)
+- [Open the app](https://silverswap-app.github.io/dashboard/)
 
-## Official resources
-Website: https://silverswap.io/
-Official swap app: https://silverswap.io/swap
-Documentation: https://docs.silverswap.io/silverswap
-Contract directory: https://docs.silverswap.io/silverswap/technical-details/editor
-Liquidity guide: https://docs.silverswap.io/silverswap/yield-farming/concentrated-liquidity/adding-liquidity-to-an-existing-pool
-Official X: https://x.com/SilverSwapDex
-Official Telegram: https://t.me/Silver_Swap
-Official Discord: https://discord.gg/ftYXBXK723
-Audit index: https://hashlock.com/audits/silverswap
-
-## Data & references
-DefiLlama protocol profile: https://defillama.com/protocol/silverswap
-CoinGecko AG profile: https://www.coingecko.com/en/coins/silver-2
-AG token on SonicScan: https://sonicscan.org/token/0x005851f943ee2957B1748957F26319e4f9EdeBC1
-Sonic network documentation: https://docs.soniclabs.com/
-SonicScan explorer: https://sonicscan.org/
-ERC-20 standard: https://eips.ethereum.org/EIPS/eip-20
-ERC-721 standard: https://eips.ethereum.org/EIPS/eip-721
+## Sources
+- [docs.silverswap.io](https://docs.silverswap.io/silverswap)
+- [docs.silverswap.io](https://docs.silverswap.io/silverswap/tokenomics/editor)
+- [defillama.com](https://defillama.com/protocol/silverswap)
+- [coingecko.com](https://www.coingecko.com/en/coins/silver-2)
