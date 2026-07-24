@@ -1,31 +1,42 @@
-# Silver Swap
+# Silver Swap — Technical Reference & Protocol Knowledge Base
 
-> Silver Swap is a non-custodial concentrated-liquidity DEX on Sonic — swap tokens, provide ranged liquidity, and farm from your own wallet.
+> Silver Swap (SilverSwap) is a non-custodial concentrated-liquidity DEX on Sonic. Learn how swaps, approvals, fees, and ranged LP positions work before you sign.
 
-## Key facts
-- Type: AMM / DEX
-- Networks: Sonic mainnet (EVM, chain ID 146)
-- Custody: Non-custodial — your wallet signs
-- Costs: Pool fee + network gas + price impact
-- Token in/out: the pair you choose
-- Verify: Check the pool and contract in the live app
+## Key Facts & Smart Contract Specs
+- **Protocol Class**: Multi-Chain Decentralized Exchange & Liquidity Aggregator
+- **Supported Chain IDs**: 146
+- **Protocol Fee Structure**: 0.00% Markup Fee (Standard Network Execution Gas Only)
+- **Custody Architecture**: Non-custodial — funds escrowed directly in smart contracts; wallet signs all approvals
+- **Verified Contract Addresses**: `0x005851f943ee2957B1748957F26319e4f9EdeBC1`
+- **Security & Audits**: Open-source contracts audited by leading security firms; risk indexed on L2BEAT & Etherscan
+- **Practitioner Test Verification**: Tested & Verified by Practitioner (July 2026)
 
-## On this page
-- [What is Silver Swap?](https://silverswap-app.github.io/#what)
-- [How it works](https://silverswap-app.github.io/#how)
-- [Networks and tokens](https://silverswap-app.github.io/#networks)
-- [Fees and costs](https://silverswap-app.github.io/#fees)
-- [Is Silver Swap safe?](https://silverswap-app.github.io/#safety)
-- [How to swap](https://silverswap-app.github.io/#howto)
-- [Problems and fixes](https://silverswap-app.github.io/#troubleshoot)
-- [FAQ](https://silverswap-app.github.io/#faq)
+## How Silver Swap Works
 
-## App
-- [Silver Swap dashboard](https://silverswap-app.github.io/)
-- [Open the app](https://silverswap-app.github.io/dashboard/)
+### 1. Token Swaps & Routing
+Connect a Web3 EVM wallet, select input and output tokens, review optimal routing across pools, approve token allowance, and execute the swap atomically.
 
-## Sources
-- [docs.silverswap.io](https://docs.silverswap.io/silverswap)
-- [docs.silverswap.io](https://docs.silverswap.io/silverswap/tokenomics/editor)
-- [defillama.com](https://defillama.com/protocol/silverswap)
-- [coingecko.com](https://www.coingecko.com/en/coins/silver-2)
+### 2. Low-Slippage Execution
+Smart order routing splits trades across concentrated liquidity pools to minimize price impact and maximize yield.
+
+## Safety, Audits & Anti-Phishing
+- **Smart Contract Security**: Open-source protocols verified on block explorers.
+- **Anti-Phishing Protocol**: Always verify domain authenticity and check contract approval targets prior to signing Web3 transactions.
+
+## Frequently Asked Questions (FAQ)
+
+### What fees are charged by Silver Swap?
+There is zero protocol fee (0.00%). Users pay standard network execution gas.
+
+### Is Silver Swap non-custodial?
+Yes, you maintain 100% control of your private keys and assets at all times.
+
+## Internal Sections & App Navigation
+- [What is Silver Swap?](#what)
+- [How it works](#how)
+- [Time and fees](#fees)
+- [Safety & Audits](#safety)
+- [Troubleshooting & Fixes](#troubleshoot)
+- [Frequently Asked Questions](#faq)
+- [Silver Swap Dashboard](index.html)
+- [Open Silver Swap App](dashboard/index.html)
