@@ -1,1107 +1,231 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SilverSwap — Self-Custody AMM Swap Guide</title>
-<meta name="description" content="SilverSwap is a self-custody AMM exchange for trading ETH, USDC and other tokens directly from your wallet. See how pool pricing, slippage, approvals and routing work before you sign.">
-<link rel="canonical" href="https://silverswap-app.github.io/">
-<meta property="og:type" content="website">
-<meta property="og:title" content="SilverSwap">
-<meta property="og:description" content="SilverSwap is a self-custody AMM exchange for trading ETH, USDC and other tokens directly from your wallet. See how pool pricing, slippage, approvals and routing work before you sign.">
-<meta property="og:url" content="https://silverswap-app.github.io/">
-<meta property="og:image" content="https://silverswap-app.github.io/og.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="SilverSwap">
-<meta name="twitter:description" content="SilverSwap is a self-custody AMM exchange for trading ETH, USDC and other tokens directly from your wallet. See how pool pricing, slippage, approvals and routing work before you sign.">
-<meta name="twitter:image" content="https://silverswap-app.github.io/og.png">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SilverSwap — Self-Custody AMM Swap Guide</title>
+  <meta name="description" content="SilverSwap is a self-custody AMM exchange for trading ETH, USDC and other tokens directly from your wallet. See how pool pricing, slippage, approvals and routing work before you sign.">
+  <link rel="canonical" href="https://silverswap-app.github.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SilverSwap">
+  <meta property="og:description" content="SilverSwap is a self-custody AMM exchange for trading ETH, USDC and other tokens directly from your wallet. See how pool pricing, slippage, approvals and routing work before you sign.">
+  <meta property="og:url" content="https://silverswap-app.github.io/">
+  <meta property="og:image" content="https://silverswap-app.github.io/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SilverSwap">
+  <meta name="twitter:description" content="SilverSwap is a self-custody AMM exchange for trading ETH, USDC and other tokens directly from your wallet. See how pool pricing, slippage, approvals and routing work before you sign.">
+  <meta name="twitter:image" content="https://silverswap-app.github.io/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap">
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://silverswap-app.github.io/#website", "url": "https://silverswap-app.github.io/", "name": "SilverSwap — Self-Custody AMM Swap Guide"}, {"@type": "WebPage", "@id": "https://silverswap-app.github.io/#webpage", "url": "https://silverswap-app.github.io/", "name": "SilverSwap — Self-Custody AMM Swap Guide", "isPartOf": {"@id": "https://silverswap-app.github.io/#website"}, "description": "SilverSwap is a self-custody AMM exchange for trading ETH, USDC and other tokens directly from your wallet. See how pool pricing, slippage, approvals and routing work before you sign.", "datePublished": "2026-10-10", "dateModified": "2026-10-10"}, {"@type": "SoftwareApplication", "name": "SilverSwap", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://silverswap-app.github.io/"}, {"@type": "ListItem", "position": 2, "name": "Swaps"}, {"@type": "ListItem", "position": 3, "name": "SilverSwap"}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is SilverSwap?", "acceptedAnswer": {"@type": "Answer", "text": "SilverSwap is a self-custody automated-market-maker exchange that lets you trade tokens directly against liquidity pools from your own wallet, with no order book, account, or custodian involved."}}, {"@type": "Question", "name": "How does SilverSwap set its prices?", "acceptedAnswer": {"@type": "Answer", "text": "Each pool holds reserves of two tokens, and the ratio between those reserves determines the price. A trade shifts the ratio, which is also why larger trades experience more price impact than smaller ones."}}, {"@type": "Question", "name": "Why do I need to approve a token before swapping on SilverSwap?", "acceptedAnswer": {"@type": "Answer", "text": "ERC-20 tokens require a signed approval before any contract, including SilverSwap's, can move them out of your wallet. ETH doesn't need this step because it is sent directly with the transaction."}}, {"@type": "Question", "name": "What does slippage tolerance control?", "acceptedAnswer": {"@type": "Answer", "text": "It sets the maximum price movement you'll accept between signing a swap and its confirmation on-chain. Too tight a setting can cause failed transactions; too loose a setting can let a thin pool execute you at a worse price."}}, {"@type": "Question", "name": "Does SilverSwap ever hold my funds?", "acceptedAnswer": {"@type": "Answer", "text": "No. SilverSwap is non-custodial — your assets stay in your wallet before the swap and land back in your wallet immediately after it settles, with no intermediate holding step."}}, {"@type": "Question", "name": "Why did my SilverSwap swap route through more than one pool?", "acceptedAnswer": {"@type": "Answer", "text": "If no direct pool exists for your pair, SilverSwap routes the trade across two or more pools to reach the best combined price. The route and resulting quote are shown before you sign."}}, {"@type": "Question", "name": "What fees does a SilverSwap trade include?", "acceptedAnswer": {"@type": "Answer", "text": "A swap includes the network gas paid in ETH to process the transaction and a small swap fee that goes to the liquidity providers behind the pool. Both are shown in the quote before you confirm."}}]}]}</script>
-<style>
-:root{--bg:#110C18;--surface:#1B1324;--text:#EFE9F6;--muted:#998BA6;--accent:#A78BFA;--accent-ink:#160A22;--radius:11px;--display:"Sora";--body:"IBM Plex Sans"}
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-html {
-  min-width: 280px;
-  scroll-behavior: smooth;
-  scroll-padding-top: 2rem;
-  background: var(--bg);
-  -webkit-text-size-adjust: 100%;
-}
-body {
-  margin: 0;
-  color: var(--text);
-  background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 42rem), var(--bg);
-  font-family: var(--body);
-  font-size: 1rem;
-  line-height: 1.65;
-  overflow-wrap: anywhere;
-  -webkit-font-smoothing: antialiased;
-}
-::selection {
-  color: var(--accent-ink);
-  background: var(--accent);
-}
-a {
-  color: var(--accent);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.22em;
-  transition: color 160ms ease, background 160ms ease, box-shadow 160ms ease;
-}
-a:hover {
-  color: color-mix(in srgb, var(--accent) 76%, var(--text));
-}
-a:focus-visible,
-input:focus-visible,
-summary:focus-visible,
-[tabindex]:focus-visible {
-  outline: 3px solid var(--accent);
-  outline-offset: 5px;
-}
-img,
-svg {
-  max-width: 100%;
-  vertical-align: middle;
-}
-img {
-  height: auto;
-}
-input,
-output {
-  font-family: var(--body);
-}
-h1,
-h2,
-h3,
-h4 {
-  color: var(--text);
-  font-family: var(--display);
-  text-wrap: balance;
-}
-p,
-ul,
-ol,
-blockquote,
-figure {
-  margin: 0;
-}
-.cdd32db {
-  width: min(100% - 4rem, 1120px);
-  margin-inline: auto;
-}
-.c245ac9 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  min-height: 92px;
-  border-bottom: 1px solid color-mix(in srgb, var(--text) 9%, transparent);
-}
-.cf603dd {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  color: var(--text);
-  font-family: var(--display);
-  font-size: 1.2rem;
-  font-weight: 750;
-  letter-spacing: -0.045em;
-}
-.c181e29 {
-  display: grid;
-  width: 36px;
-  height: 36px;
-  place-items: center;
-  border: 1px solid color-mix(in srgb, var(--accent) 23%, transparent);
-  border-radius: calc(var(--radius) * 0.55);
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
-  font-size: 1.4rem;
-  line-height: 1;
-}
-.c4c0d8c {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.7rem;
-  min-height: 42px;
-  padding: 0.55rem 1.1rem;
-  border: 1px solid color-mix(in srgb, var(--text) 14%, transparent);
-  border-radius: calc(var(--radius) * 0.65);
-  color: var(--text);
-  background: color-mix(in srgb, var(--surface) 80%, transparent);
-  font-size: 0.85rem;
-  font-weight: 650;
-  text-decoration: none;
-}
-.c4c0d8c:hover {
-  color: var(--accent);
-  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
-  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
-}
-.cd13f97 {
-  padding-block: 1.4rem 0.5rem;
-  color: var(--muted);
-  font-size: 0.78rem;
-}
-.c95a3f1 {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.45rem 0.7rem;
-  margin: 0;
-  padding: 0;
-  color: var(--muted);
-  list-style: none;
-}
-.c95a3f1 ol,
-.c95a3f1 ul {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.45rem 0.7rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.c95a3f1 li {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-}
-.c95a3f1 li + li::before {
-  content: "/";
-  color: color-mix(in srgb, var(--muted) 60%, transparent);
-}
-.c95a3f1 a {
-  color: var(--muted);
-  text-decoration: none;
-}
-.c95a3f1 a:hover {
-  color: var(--accent);
-  text-decoration: underline;
-}
-.c95a3f1 [aria-current="page"] {
-  color: var(--text);
-}
-.c8b81ac {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: clamp(1.5rem, 3.5vw, 2.75rem);
-  text-align: center;
-}
-.c7f8250 {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  margin-bottom: 1.25rem;
-  padding: 0.35rem 0.8rem;
-  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
-  border-radius: calc(var(--radius) * 2);
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-.c7f8250::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
-}
-.c8b81ac h1 {
-  max-width: 960px;
-  margin: 0;
-  font-size: clamp(2.3rem, 5vw, 4.2rem);
-  font-weight: 650;
-  line-height: 1.06;
-  letter-spacing: -0.06em;
-}
-.c8b81ac h1 em,
-.c8b81ac h1 strong,
-.c8b81ac h1 span {
-  color: var(--accent);
-}
-.c8b81ac h1 em {
-  font-style: normal;
-}
-.caa823f {
-  max-width: 720px;
-  margin: 1.1rem auto 0;
-  color: var(--muted);
-  font-size: clamp(1rem, 1.65vw, 1.15rem);
-  line-height: 1.85;
-  text-wrap: pretty;
-}
-.c338a38 {
-  position: relative;
-  isolation: isolate;
-  width: 100%;
-  margin-top: clamp(1.25rem, 2.5vw, 2rem);
-  padding: clamp(1.2rem, 3.5vw, 2.6rem);
-  border: 1px solid color-mix(in srgb, var(--accent) 19%, var(--surface));
-  border-radius: var(--radius);
-  background: linear-gradient(145deg, color-mix(in srgb, var(--accent) 5%, var(--surface)), var(--surface) 48%);
-  box-shadow: 0 24px 65px -24px color-mix(in srgb, var(--text) 21%, transparent), 0 4px 14px -7px color-mix(in srgb, var(--accent) 16%, transparent);
-  text-align: left;
-}
-.c338a38::before {
-  position: absolute;
-  inset: -1px 12% auto;
-  height: 2px;
-  content: "";
-  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 0%, transparent), color-mix(in srgb, var(--accent) 65%, transparent), color-mix(in srgb, var(--accent) 0%, transparent));
-}
-.c7c9243 {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.6rem 1rem;
-  margin-bottom: 1rem;
-}
-.c7c9243 h2 {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 650;
-  letter-spacing: -0.035em;
-}
-.c7c9243 p {
-  color: var(--muted);
-  font-size: 0.78rem;
-}
-.c51da0b {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: stretch;
-  gap: 1rem;
-}
-.c8ca9ea {
-  min-width: 0;
-  padding: 1.4rem 1.5rem 1.1rem;
-  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
-  border-radius: calc(var(--radius) * 0.7);
-  background: color-mix(in srgb, var(--bg) 65%, var(--surface));
-  transition: border-color 160ms ease, box-shadow 160ms ease;
-}
-.c8ca9ea:focus-within {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 9%, transparent);
-}
-.c4d01b3 {
-  border-color: color-mix(in srgb, var(--accent) 18%, transparent);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), color-mix(in srgb, var(--accent) 3%, var(--surface)));
-}
-.c27d3fd {
-  display: block;
-  margin-bottom: 0.65rem;
-  color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 550;
-}
-#amount {
-  display: block;
-  width: 100%;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  color: var(--text);
-  background: color-mix(in srgb, var(--surface) 0%, transparent);
-  font-family: var(--body);
-  font-size: clamp(1.7rem, 3vw, 2.65rem);
-  font-weight: 550;
-  font-variant-numeric: tabular-nums;
-  line-height: 1.3;
-  letter-spacing: -0.045em;
-  appearance: textfield;
-  -moz-appearance: textfield;
-}
-#amount::-webkit-inner-spin-button,
-#amount::-webkit-outer-spin-button {
-  margin: 0;
-  -webkit-appearance: none;
-}
-#amount::placeholder {
-  color: var(--muted);
-  opacity: 0.65;
-}
-#amount:focus-visible {
-  outline-offset: 3px;
-  outline-width: 2px;
-}
-#amount[aria-invalid="true"] {
-  text-decoration: underline wavy;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
-}
-#received {
-  display: block;
-  min-height: 1.3em;
-  color: var(--text);
-  font-size: clamp(1.7rem, 3vw, 2.65rem);
-  font-weight: 550;
-  font-variant-numeric: tabular-nums;
-  line-height: 1.3;
-  letter-spacing: -0.045em;
-  overflow-wrap: anywhere;
-}
-.cc5111a {
-  display: block;
-  margin-top: 0.6rem;
-  color: var(--muted);
-  font-size: 0.73rem;
-  line-height: 1.5;
-}
-.c4e77c5 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding-inline: 0.15rem;
-}
-.cba009d {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  width: 48px;
-  min-height: 48px;
-  padding: 0.4rem;
-  border: 1px solid color-mix(in srgb, var(--text) 9%, transparent);
-  border-radius: calc(var(--radius) * 0.55);
-  background: var(--surface);
-  box-shadow: 0 4px 10px color-mix(in srgb, var(--text) 4%, transparent);
-  font-size: 0.65rem;
-  line-height: 1.2;
-  text-align: center;
-}
-.cba009d img,
-.cba009d svg {
-  display: block;
-  width: 30px;
-  height: 30px;
-  object-fit: contain;
-}
-.c701120 {
-  color: var(--accent);
-  font-size: 1.3rem;
-}
-.c9becd2 {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.55fr);
-  align-items: center;
-  gap: 1.5rem 2.5rem;
-  margin-top: 1.4rem;
-}
-.c05f441 {
-  display: grid;
-  gap: 0.45rem;
-  margin: 0;
-  font-size: 0.8rem;
-}
-.c05f441 > div {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-}
-.c05f441 dt {
-  color: var(--muted);
-}
-.c05f441 dd {
-  margin: 0;
-  color: var(--text);
-  font-weight: 550;
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-}
-.c69cb8a {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  min-height: 56px;
-  padding: 0.9rem 1.3rem;
-  border: 1px solid color-mix(in srgb, var(--accent) 85%, var(--text));
-  border-radius: calc(var(--radius) * 0.65);
-  color: var(--accent-ink);
-  background: linear-gradient(120deg, var(--accent), color-mix(in srgb, var(--accent) 85%, var(--text)));
-  box-shadow: 0 8px 22px -8px color-mix(in srgb, var(--accent) 45%, transparent);
-  font-size: 0.9rem;
-  font-weight: 650;
-  text-decoration: none;
-  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
-}
-.c69cb8a:hover {
-  transform: translateY(-2px);
-  color: var(--accent-ink);
-  background: linear-gradient(120deg, color-mix(in srgb, var(--accent) 94%, var(--text)), color-mix(in srgb, var(--accent) 78%, var(--text)));
-  box-shadow: 0 12px 28px -9px color-mix(in srgb, var(--accent) 50%, transparent);
-}
-.c69cb8a:active {
-  transform: translateY(0);
-}
-.c69cb8a span:last-child {
-  font-size: 1.3rem;
-  line-height: 1;
-}
-.c9b1873 {
-  min-height: 1.5em;
-  margin-top: 0.8rem;
-  color: var(--muted);
-  font-size: 0.75rem;
-}
-.c9b1873[data-invalid="true"] {
-  color: var(--text);
-  font-weight: 600;
-}
-.c932fbe {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1px;
-  margin-block: 1.6rem 4.5rem;
-  padding: 1rem 0;
-  border-block: 1px solid color-mix(in srgb, var(--text) 8%, transparent);
-  list-style: none;
-}
-.c932fbe li {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  padding: 0.6rem 0.75rem;
-  color: var(--muted);
-  font-size: 0.8rem;
-  text-align: center;
-}
-.c932fbe li + li {
-  border-left: 1px solid color-mix(in srgb, var(--text) 9%, transparent);
-}
-.c932fbe li::before {
-  content: "✓";
-  color: var(--accent);
-  font-size: 0.85rem;
-  font-weight: 650;
-}
-.c648f51 {
-  margin-bottom: 4rem;
-  padding: clamp(1.25rem, 3.5vw, 2.75rem);
-  border: 1px solid color-mix(in srgb, var(--text) 9%, transparent);
-  border-radius: var(--radius);
-  background: var(--surface);
-  box-shadow: 0 12px 35px -22px color-mix(in srgb, var(--text) 18%, transparent);
-}
-.cae5d0a {
-  margin: 0 0 1.6rem;
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.045em;
-}
-.c21943b {
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
-}
-.c2ed662 {
-  width: 100%;
-  border-collapse: collapse;
-  color: var(--text);
-  font-size: 0.92rem;
-  line-height: 1.65;
-  text-align: left;
-}
-.c2ed662 caption {
-  margin-bottom: 1rem;
-  color: var(--muted);
-  font-size: 0.85rem;
-  text-align: left;
-}
-.c2ed662 th,
-.c2ed662 td {
-  padding: 1.05rem 1.2rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--text) 8%, transparent);
-  vertical-align: top;
-}
-.c2ed662 th {
-  width: 31%;
-  color: var(--muted);
-  font-weight: 500;
-}
-.c2ed662 td {
-  font-weight: 550;
-}
-.c2ed662 tr:nth-child(odd) {
-  background: color-mix(in srgb, var(--accent) 3%, var(--surface));
-}
-.c2ed662 tr:last-child > * {
-  border-bottom: 0;
-}
-.c2ed662 thead th {
-  color: var(--text);
-  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
-  font-weight: 650;
-}
-.c6ca8f0 {
-  width: min(100%, 860px);
-  margin-inline: auto;
-}
-.c698921 {
-  margin-block: 0 3.6rem;
-  padding-bottom: 3.2rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--text) 9%, transparent);
-  scroll-margin-top: 2rem;
-}
-.c877466 {
-  margin: 0 0 1.25rem;
-  color: var(--text);
-  font-family: var(--display);
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.045em;
-}
-.c7762f2 {
-  color: var(--muted);
-  font-family: var(--body);
-  font-size: 1rem;
-  line-height: 1.85;
-}
-.c7762f2 > * + * {
-  margin-top: 1.25rem;
-}
-.c7762f2 h3,
-.c7762f2 h4 {
-  margin-block: 2rem 0.75rem;
-  color: var(--text);
-  font-family: var(--display);
-  font-size: 1.3rem;
-  font-weight: 600;
-  line-height: 1.35;
-  letter-spacing: -0.025em;
-}
-.c7762f2 h4 {
-  font-size: 1.1rem;
-}
-.c7762f2 strong,
-.c9581a7 strong {
-  color: var(--text);
-  font-weight: 650;
-}
-.c7762f2 ul,
-.c7762f2 ol,
-.c9581a7 ul,
-.c9581a7 ol {
-  padding-left: 1.4rem;
-}
-.c7762f2 li,
-.c9581a7 li {
-  padding-left: 0.3rem;
-}
-.c7762f2 li + li,
-.c9581a7 li + li {
-  margin-top: 0.65rem;
-}
-.c7762f2 li::marker,
-.c9581a7 li::marker {
-  color: var(--accent);
-}
-.c7762f2 li > ul,
-.c7762f2 li > ol {
-  margin-top: 0.65rem;
-}
-.c7762f2 blockquote {
-  padding: 1.25rem 1.5rem;
-  border-left: 3px solid var(--accent);
-  border-radius: 0 calc(var(--radius) * 0.45) calc(var(--radius) * 0.45) 0;
-  color: var(--text);
-  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
-}
-.c7762f2 blockquote p + p {
-  margin-top: 0.8rem;
-}
-.c7762f2 table {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: auto;
-  border-collapse: collapse;
-  border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
-  border-radius: calc(var(--radius) * 0.6);
-  background: var(--surface);
-  font-size: 0.88rem;
-  line-height: 1.6;
-  text-align: left;
-  overscroll-behavior-inline: contain;
-}
-.c7762f2 table th,
-.c7762f2 table td {
-  min-width: 8rem;
-  padding: 0.95rem 1.15rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--text) 9%, transparent);
-  vertical-align: top;
-}
-.c7762f2 table th {
-  color: var(--text);
-  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
-  font-weight: 600;
-}
-.c7762f2 table tbody tr:nth-child(even) {
-  background: color-mix(in srgb, var(--bg) 65%, var(--surface));
-}
-.c7762f2 table tr:last-child td {
-  border-bottom: 0;
-}
-.c7762f2 table caption {
-  padding: 0.85rem 1.15rem;
-  color: var(--muted);
-  font-size: 0.8rem;
-  text-align: left;
-}
-.c7762f2 code,
-.c7762f2 pre {
-  border-radius: calc(var(--radius) * 0.3);
-  color: var(--text);
-  background: color-mix(in srgb, var(--text) 5%, var(--surface));
-  font-family: var(--body);
-  font-size: 0.9em;
-}
-.c7762f2 code {
-  padding: 0.15em 0.4em;
-}
-.c7762f2 pre {
-  overflow-x: auto;
-  padding: 1.2rem;
-}
-.c7762f2 pre code {
-  padding: 0;
-  background: color-mix(in srgb, var(--surface) 0%, transparent);
-}
-.c7762f2 figure img {
-  display: block;
-  border-radius: calc(var(--radius) * 0.7);
-}
-.c7762f2 figcaption {
-  margin-top: 0.7rem;
-  color: var(--muted);
-  font-size: 0.8rem;
-}
-.c492216 {
-  margin-block: 1rem;
-  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
-  border-radius: calc(var(--radius) * 0.7);
-  background: var(--surface);
-  transition: border-color 180ms ease, box-shadow 180ms ease;
-}
-.c492216:hover {
-  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
-}
-.c492216[open] {
-  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
-  box-shadow: 0 8px 25px -14px color-mix(in srgb, var(--text) 15%, transparent);
-}
-.c65683c {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  padding: 1.3rem 1.5rem;
-  border-radius: calc(var(--radius) * 0.7);
-  color: var(--text);
-  font-family: var(--display);
-  font-size: 1.04rem;
-  font-weight: 550;
-  line-height: 1.5;
-  list-style: none;
-  cursor: pointer;
-}
-.c65683c::-webkit-details-marker {
-  display: none;
-}
-.c65683c::after {
-  display: grid;
-  flex: 0 0 27px;
-  width: 27px;
-  height: 27px;
-  place-items: center;
-  content: "+";
-  border-radius: 50%;
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 9%, var(--surface));
-  font-family: var(--body);
-  font-size: 1.2rem;
-  font-weight: 400;
-  line-height: 1;
-}
-.c492216[open] > .c65683c::after {
-  content: "−";
-}
-.c9581a7 {
-  padding: 0 1.5rem 1.5rem;
-  color: var(--muted);
-  font-family: var(--body);
-  font-size: 0.95rem;
-  line-height: 1.85;
-}
-.c9581a7 > * + * {
-  margin-top: 1rem;
-}
-.c41fd1b {
-  margin-top: 4rem;
-  padding: 2.2rem 0 2.5rem;
-  border-top: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
-}
-.c41fd1b .cae5d0a {
-  margin-bottom: 1.2rem;
-  font-size: 1.35rem;
-}
-.c92cf7f {
-  display: grid;
-  gap: 0.7rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.c1543fe {
-  min-width: 0;
-  padding: 0.8rem 1rem;
-  border: 1px solid color-mix(in srgb, var(--text) 8%, transparent);
-  border-radius: calc(var(--radius) * 0.45);
-  color: var(--muted);
-  background: color-mix(in srgb, var(--surface) 70%, var(--bg));
-  font-size: 0.82rem;
-  line-height: 1.7;
-  overflow-wrap: anywhere;
-}
-.c1543fe a,
-a.c1543fe {
-  color: var(--text);
-  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
-}
-.c1543fe a:hover,
-a.c1543fe:hover {
-  color: var(--accent);
-  text-decoration-color: var(--accent);
-}
-.cb8b4bb {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem 2rem;
-  margin-top: 1rem;
-  padding-block: 1.7rem 2.2rem;
-  border-top: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
-  color: var(--muted);
-  font-size: 0.78rem;
-}
-.c14af0d {
-  color: var(--text);
-  font-family: var(--display);
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-}
-.c1442ae span {
-  color: var(--text);
-}
-@media (min-width: 1280px) {
-  .c8b81ac {
-    padding-top: 5.2rem;
-  }
-  .c338a38 {
-    margin-top: 3.4rem;
-  }
-  .c8ca9ea {
-    padding-block: 1.6rem 1.3rem;
-  }
-}
-@media (max-width: 900px) {
-  .cdd32db {
-    width: min(100% - 3rem, 1120px);
-  }
-  .c51da0b {
-    gap: 0.65rem;
-  }
-  .c8ca9ea {
-    padding: 1.1rem;
-  }
-  .c4e77c5 {
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-  .cba009d {
-    width: 38px;
-    min-height: 38px;
-  }
-  .cba009d img,
-  .cba009d svg {
-    width: 25px;
-    height: 25px;
-  }
-  .c701120 {
-    line-height: 1;
-  }
-  .c932fbe {
-    margin-bottom: 3rem;
-  }
-}
-@media (max-width: 640px) {
-  html {
-    scroll-padding-top: 1rem;
-  }
-  .cdd32db {
-    width: calc(100% - 2rem);
-  }
-  .c245ac9 {
-    min-height: 76px;
-    gap: 0.75rem;
-  }
-  .cf603dd {
-    gap: 0.5rem;
-    font-size: 1.08rem;
-  }
-  .c4c0d8c {
-    min-height: 40px;
-    padding: 0.45rem 0.8rem;
-    font-size: 0.78rem;
-  }
-  .cd13f97 {
-    padding-top: 1rem;
-  }
-  .c8b81ac {
-    padding-top: 2.4rem;
-  }
-  .c8b81ac h1 {
-    font-size: clamp(2.25rem, 10vw, 3.6rem);
-    letter-spacing: -0.05em;
-  }
-  .caa823f {
-    margin-top: 1.1rem;
-    line-height: 1.75;
-  }
-  .c338a38 {
-    padding: 1.1rem;
-  }
-  .c7c9243 {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0.3rem;
-    margin-bottom: 1.1rem;
-  }
-  .c51da0b {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.7rem;
-  }
-  .c8ca9ea {
-    padding: 1.2rem;
-  }
-  #amount,
-  #received {
-    font-size: clamp(1.8rem, 8vw, 2.6rem);
-  }
-  .c4e77c5 {
-    flex-direction: row;
-    gap: 0.8rem;
-    padding-block: 0.1rem;
-  }
-  .cba009d {
-    width: 40px;
-    min-height: 40px;
-  }
-  .c9becd2 {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1.2rem;
-    margin-top: 1.2rem;
-  }
-  .c05f441 {
-    font-size: 0.78rem;
-  }
-  .c69cb8a {
-    min-height: 54px;
-  }
-  .c932fbe {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-    margin-block: 1.4rem 2.6rem;
-    padding-block: 0.5rem;
-  }
-  .c932fbe li {
-    justify-content: flex-start;
-    padding: 0.7rem 1rem;
-  }
-  .c932fbe li + li {
-    border-top: 1px solid color-mix(in srgb, var(--text) 6%, transparent);
-    border-left: 0;
-  }
-  .c648f51 {
-    margin-bottom: 2.8rem;
-    padding: 1.2rem;
-  }
-  .cae5d0a {
-    margin-bottom: 1.2rem;
-  }
-  .c2ed662 {
-    font-size: 0.82rem;
-  }
-  .c2ed662 th,
-  .c2ed662 td {
-    padding: 0.8rem 0.6rem;
-  }
-  .c2ed662 th {
-    width: 38%;
-  }
-  .c698921 {
-    margin-bottom: 2.5rem;
-    padding-bottom: 2.3rem;
-  }
-  .c7762f2 {
-    font-size: 0.95rem;
-    line-height: 1.8;
-  }
-  .c7762f2 h3 {
-    font-size: 1.2rem;
-  }
-  .c7762f2 blockquote {
-    padding: 1rem 1.15rem;
-  }
-  .c65683c {
-    gap: 0.9rem;
-    padding: 1.1rem;
-    font-size: 0.98rem;
-  }
-  .c9581a7 {
-    padding: 0 1.1rem 1.2rem;
-    font-size: 0.9rem;
-  }
-  .c41fd1b {
-    margin-top: 2.6rem;
-    padding-block: 1.8rem;
-  }
-  .cb8b4bb {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.45rem;
-    padding-block: 1.4rem 1.8rem;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
-    transition: none;
-    animation: none;
-  }
-  .c69cb8a:hover {
-    transform: none;
-  }
-}
-@media print {
-  body {
-    background: var(--bg);
-  }
-  .cdd32db,
-  .c6ca8f0 {
-    width: 100%;
-  }
-  .c4c0d8c,
-  .c69cb8a {
-    display: none;
-  }
-  .c8b81ac {
-    padding-top: 1.5rem;
-  }
-  .c8b81ac h1 {
-    font-size: 2.6rem;
-  }
-  .c338a38,
-  .c648f51,
-  .c492216 {
-    box-shadow: none;
-    break-inside: avoid;
-  }
-  .c7762f2 h3,
-  .c877466 {
-    break-after: avoid;
-  }
-  .c7762f2 table {
-    display: table;
-    overflow: visible;
-  }
-}
-</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://silverswap-app.github.io/#website", "url": "https://silverswap-app.github.io/", "name": "SilverSwap — Self-Custody AMM Swap Guide"}, {"@type": "WebPage", "@id": "https://silverswap-app.github.io/#webpage", "url": "https://silverswap-app.github.io/", "name": "SilverSwap — Self-Custody AMM Swap Guide", "isPartOf": {"@id": "https://silverswap-app.github.io/#website"}, "description": "SilverSwap is a self-custody AMM exchange for trading ETH, USDC and other tokens directly from your wallet. See how pool pricing, slippage, approvals and routing work before you sign.", "datePublished": "2026-10-11", "dateModified": "2026-10-11"}, {"@type": "SoftwareApplication", "name": "SilverSwap", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://silverswap-app.github.io/"}, {"@type": "ListItem", "position": 2, "name": "Swaps"}, {"@type": "ListItem", "position": 3, "name": "SilverSwap"}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is SilverSwap?", "acceptedAnswer": {"@type": "Answer", "text": "SilverSwap is a self-custody automated-market-maker exchange that lets you trade tokens directly against liquidity pools from your own wallet, with no order book, account, or custodian involved."}}, {"@type": "Question", "name": "How does SilverSwap set its prices?", "acceptedAnswer": {"@type": "Answer", "text": "Each pool holds reserves of two tokens, and the ratio between those reserves determines the price. A trade shifts the ratio, which is also why larger trades experience more price impact than smaller ones."}}, {"@type": "Question", "name": "Why do I need to approve a token before swapping on SilverSwap?", "acceptedAnswer": {"@type": "Answer", "text": "ERC-20 tokens require a signed approval before any contract, including SilverSwap's, can move them out of your wallet. ETH doesn't need this step because it is sent directly with the transaction."}}, {"@type": "Question", "name": "What does slippage tolerance control?", "acceptedAnswer": {"@type": "Answer", "text": "It sets the maximum price movement you'll accept between signing a swap and its confirmation on-chain. Too tight a setting can cause failed transactions; too loose a setting can let a thin pool execute you at a worse price."}}, {"@type": "Question", "name": "Does SilverSwap ever hold my funds?", "acceptedAnswer": {"@type": "Answer", "text": "No. SilverSwap is non-custodial — your assets stay in your wallet before the swap and land back in your wallet immediately after it settles, with no intermediate holding step."}}, {"@type": "Question", "name": "Why did my SilverSwap swap route through more than one pool?", "acceptedAnswer": {"@type": "Answer", "text": "If no direct pool exists for your pair, SilverSwap routes the trade across two or more pools to reach the best combined price. The route and resulting quote are shown before you sign."}}, {"@type": "Question", "name": "What fees does a SilverSwap trade include?", "acceptedAnswer": {"@type": "Answer", "text": "A swap includes the network gas paid in ETH to process the transaction and a small swap fee that goes to the liquidity providers behind the pool. Both are shown in the quote before you confirm."}}]}]}</script>
+  <style>
+    :root{--bg:#110C18;--surface:#1B1324;--text:#EFE9F6;--muted:#998BA6;--accent:#A78BFA;--accent-ink:#160A22;--radius:11px;--display:"Sora";--body:"IBM Plex Sans"}
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 2rem; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 1rem/1.7 var(--body); -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); text-underline-offset: .22em; }
+    a:hover { text-decoration-thickness: .12em; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
+    ::selection { background: var(--accent); color: var(--accent-ink); }
+    h1, h2, h3, h4, h5, h6 { font-family: var(--display); line-height: 1.15; text-wrap: balance; }
+    p, h1, h2, h3 { margin-top: 0; }
+    img, svg { max-width: 100%; vertical-align: middle; }
+    .cdd32db { width: min(1180px, calc(100% - 3rem)); margin-inline: auto; }
+    .c913d5c { position: absolute; z-index: 5; top: .5rem; left: 1rem; padding: .7rem 1rem; background: var(--surface); transform: translateY(-180%); border-radius: var(--radius); }
+    .c913d5c:focus { transform: translateY(0); }
+    .c7a7a04 { border-bottom: 1px solid color-mix(in srgb,var(--text) 10%,transparent); }
+    .c40d2b7 { min-height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+    .cf5f0ea { display: inline-flex; align-items: center; gap: .7rem; color: var(--text); font: 650 1.12rem/1.2 var(--display); text-decoration: none; }
+    .c67a576 { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: calc(var(--radius) * .6); background: var(--accent); color: var(--accent-ink); }
+    .cbff71a { width: 1.2rem; height: 1.2rem; fill: none; stroke: var(--accent-ink); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: 0 0 auto; }
+    .cccb913 { display: flex; align-items: center; gap: 1.8rem; }
+    .cccb913 > a { font-size: .88rem; font-weight: 600; text-decoration: none; }
+    .cccb913 > a:not(.ce6934d) { color: var(--muted); }
+    .ce6934d { display: inline-flex; align-items: center; justify-content: center; gap: .8rem; min-height: 52px; padding: .85rem 1.4rem; border: 1px solid color-mix(in srgb,var(--accent-ink) 12%,transparent); border-radius: var(--radius); background: linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 88%,var(--text))); color: var(--accent-ink); font: 650 .95rem/1.3 var(--body); text-decoration: none; box-shadow: 0 6px 18px color-mix(in srgb,var(--accent) 17%,transparent); transition: transform .18s ease, box-shadow .18s ease; }
+    .ce6934d:hover { transform: translateY(-2px); box-shadow: 0 9px 24px color-mix(in srgb,var(--accent) 25%,transparent); }
+    .c40d2b7 .ce6934d { min-height: 42px; padding: .65rem 1rem; }
+    .cf364d6 { padding-block: 1rem 0; color: var(--muted); font-size: .8rem; overflow-wrap: anywhere; }
+    .c95a3f1 { color: var(--muted); }
+    .c95a3f1 a, a.c95a3f1 { color: var(--muted); text-decoration: none; }
+    .c95a3f1 a:hover, a.c95a3f1:hover { color: var(--accent); text-decoration: underline; }
+    .c95a3f1 ol, .c95a3f1 ul { display: flex; flex-wrap: wrap; gap: .5rem 1rem; padding: 0; margin: 0; list-style: none; }
+    .c8b81ac { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,1fr); gap: clamp(2rem,5vw,4.5rem); align-items: start; padding-block: 1.5rem 3rem; }
+    .c7f8250 { display: inline-flex; align-items: center; gap: .55rem; margin-bottom: 1.3rem; color: var(--accent); font-size: .86rem; font-weight: 600; }
+    .c7f8250::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 5px color-mix(in srgb,var(--accent) 9%,transparent); }
+    h1 { margin-bottom: 1.4rem; font-size: clamp(2.5rem,4.7vw,4.35rem); font-weight: 600; letter-spacing: -.055em; overflow-wrap: anywhere; }
+    h1 em { color: var(--accent); font-style: normal; }
+    .c918b08 { max-width: 48ch; margin-bottom: 2rem; color: var(--muted); font-size: 1.08rem; line-height: 1.8; }
+    .c8be3b7 { position: relative; min-width: 0; padding: clamp(1.1rem,2.4vw,1.5rem); border: 1px solid color-mix(in srgb,var(--accent) 20%,var(--surface)); border-radius: calc(var(--radius) * 1.6); background: linear-gradient(155deg,color-mix(in srgb,var(--accent) 7%,var(--surface)),var(--surface) 40%); box-shadow: 0 24px 64px color-mix(in srgb,var(--text) 9%,transparent),0 4px 12px color-mix(in srgb,var(--accent) 6%,transparent); }
+    .ccf4b0d { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .7rem; margin-bottom: 1rem; }
+    .ccf4b0d h2 { margin: 0; font-size: 1.35rem; letter-spacing: -.035em; }
+    .c606cf0 { display: inline-flex; align-items: center; gap: .4rem; padding: .3rem .65rem; border: 1px solid color-mix(in srgb,var(--accent) 16%,transparent); border-radius: 999px; background: color-mix(in srgb,var(--accent) 8%,var(--surface)); color: var(--accent); font-size: .72rem; font-weight: 600; }
+    .c606cf0::before { content: ""; width: .35rem; height: .35rem; border-radius: 50%; background: var(--accent); }
+    .route { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: .8rem; padding: .8rem; margin-bottom: 1rem; border: 1px solid color-mix(in srgb,var(--text) 9%,transparent); border-radius: var(--radius); background: var(--surface); }
+    .endpoint { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: .45rem; }
+    .endpoint:last-child { align-items: flex-end; }
+    .endpoint-label, .c27d3fd { color: var(--muted); font-size: .78rem; font-weight: 500; }
+    .logo { display: flex; align-items: center; min-height: 36px; max-width: 100%; overflow-wrap: anywhere; font: 600 1rem/1.3 var(--display); }
+    .logo img, .logo svg { max-height: 36px; width: auto; max-width: 100%; object-fit: contain; }
+    .route-arrow { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: color-mix(in srgb,var(--accent) 9%,var(--surface)); }
+    .route-arrow .cbff71a { stroke: var(--accent); }
+    .c27d3fd { display: block; margin-bottom: .5rem; color: var(--text); }
+    .amount-field { display: flex; align-items: center; gap: .75rem; padding: .8rem 1rem; border: 1px solid color-mix(in srgb,var(--text) 18%,transparent); border-radius: var(--radius); background: var(--bg); transition: border-color .18s ease; }
+    .amount-field:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb,var(--accent) 12%,transparent); }
+    .amount-field input { width: 100%; min-width: 0; padding: .2rem 0; border: 0; background: var(--bg); color: var(--text); font: 550 1.6rem/1.2 var(--display); font-variant-numeric: tabular-nums; }
+    .amount-field input:focus { outline: 0; }
+    .unit { color: var(--muted); font-size: .8rem; }
+    .cf8e336 { margin: .45rem 0 .85rem; color: var(--muted); font-size: .74rem; }
+    .field-error { margin: .5rem 0; color: var(--text); font-size: .8rem; font-weight: 600; }
+    [hidden] { display: none !important; }
+    .estimate { padding: 1rem; border-radius: var(--radius); background: linear-gradient(120deg,color-mix(in srgb,var(--accent) 12%,var(--surface)),color-mix(in srgb,var(--accent) 4%,var(--surface))); }
+    .estimate-label { margin-bottom: .25rem; color: var(--muted); font-size: .8rem; }
+    .estimate-value { display: block; color: var(--text); font: 600 clamp(1.7rem,3vw,2.5rem)/1.3 var(--display); letter-spacing: -.04em; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+    .estimate-value small { color: var(--muted); font: 400 .8rem/1.4 var(--body); letter-spacing: 0; }
+    .estimate dl { display: grid; gap: .5rem; margin: .8rem 0 0; padding-top: .8rem; border-top: 1px solid color-mix(in srgb,var(--accent) 15%,transparent); font-size: .8rem; }
+    .estimate dl div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 1rem; }
+    .estimate dt { color: var(--muted); }
+    .estimate dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .method { margin-block: .7rem; color: var(--muted); font-size: .75rem; }
+    .method summary { width: fit-content; color: var(--text); cursor: pointer; }
+    .method p { margin: .65rem 0 0; }
+    .c8be3b7 > .ce6934d { width: 100%; }
+    .c40ad7b { padding: .8rem 1rem; border: 1px solid color-mix(in srgb,var(--text) 10%,transparent); border-radius: var(--radius); background: var(--surface); }
+    .cfb8ab0 { margin-bottom: .45rem; }
+    .ce8ef24 { display: flex; align-items: center; gap: .75rem; }
+    .cfb461e { flex: 1; min-width: 0; padding: 0; border: 0; background: transparent; color: var(--text); font: 550 1.55rem/1.2 var(--display); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+    .cfb461e:focus { outline: 0; }
+    .c1bac26 { position: relative; display: inline-flex; align-items: center; gap: .5rem; flex: none; padding: .4rem 1.5rem .4rem .5rem; border: 1px solid color-mix(in srgb,var(--text) 13%,transparent); border-radius: 999px; background: var(--bg); }
+    .c838a61 { width: 22px; height: 22px; border-radius: 50%; object-fit: contain; flex: none; }
+    .c670808 { border: 0; background: transparent; color: var(--text); font: 600 .95rem/1 var(--body); cursor: pointer; appearance: none; -webkit-appearance: none; }
+    .c670808:focus { outline: 0; }
+    .c1bac26::after { content: ""; position: absolute; right: .7rem; width: .42rem; height: .42rem; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: translateY(-2px) rotate(45deg); pointer-events: none; }
+    .c71272f { margin-top: .4rem; color: var(--muted); font-size: .78rem; font-variant-numeric: tabular-nums; }
+    .c2af422 { position: relative; z-index: 1; display: grid; place-items: center; width: 2.4rem; height: 2.4rem; margin: -.55rem auto; padding: 0; border: 3px solid var(--surface); border-radius: 50%; background: color-mix(in srgb,var(--accent) 13%,var(--surface)); color: var(--accent); cursor: pointer; transition: transform .2s ease, background .2s ease; }
+    .c2af422 svg { width: 1.1rem; height: 1.1rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .c2af422:hover { transform: rotate(180deg); background: color-mix(in srgb,var(--accent) 20%,var(--surface)); }
+    .cf12e8d { display: grid; gap: .5rem; margin: 1rem 0 0; padding-top: .9rem; border-top: 1px solid color-mix(in srgb,var(--accent) 15%,transparent); font-size: .82rem; }
+    .cf12e8d div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .2rem 1rem; }
+    .cf12e8d dt { color: var(--muted); }
+    .cf12e8d dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .c66523e > .ce6934d { width: 100%; margin-top: 1.05rem; }
+    .c4f5b2a { padding: 2rem; border: 1px solid color-mix(in srgb,var(--text) 10%,transparent); border-radius: calc(var(--radius) * 1.3); background: var(--surface); }
+    .cae5d0a { margin-bottom: 1.3rem; font-size: 1.65rem; font-weight: 550; letter-spacing: -.035em; }
+    .c21943b { max-width: 100%; overflow-x: auto; }
+    .c2ed662 { width: 100%; border-collapse: collapse; text-align: left; font-size: .92rem; }
+    .c2ed662 caption { padding-bottom: 1rem; text-align: left; color: var(--muted); }
+    .c2ed662 th, .c2ed662 td { padding: 1rem 1.1rem; border-bottom: 1px solid color-mix(in srgb,var(--text) 9%,transparent); vertical-align: top; overflow-wrap: anywhere; }
+    .c2ed662 th { color: var(--muted); font-weight: 500; }
+    .c2ed662 thead { background: color-mix(in srgb,var(--accent) 5%,var(--surface)); }
+    .c2ed662 tbody tr:last-child > * { border-bottom: 0; }
+    .cbeed8e { max-width: 820px; padding-block: 4rem 2rem; }
+    .c698921 { margin-bottom: 3.3rem; }
+    .c877466 { margin: 0 0 1.1rem; font: 550 clamp(1.6rem,3vw,2.2rem)/1.2 var(--display); letter-spacing: -.035em; }
+    .c7762f2 { color: var(--muted); line-height: 1.85; overflow-wrap: anywhere; }
+    .c7762f2 p { margin-bottom: 1.2rem; }
+    .c7762f2 strong, .c7762f2 h3, .c7762f2 h4 { color: var(--text); }
+    .c7762f2 ul, .c7762f2 ol { padding-left: 1.3rem; }
+    .c7762f2 li { padding-left: .3rem; margin-block: .55rem; }
+    .c7762f2 li::marker { color: var(--accent); }
+    .c7762f2 blockquote { margin: 1.5rem 0; padding: 1rem 1.4rem; border-left: 3px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; background: var(--surface); color: var(--text); }
+    .c7762f2 img { height: auto; border-radius: var(--radius); }
+    .c7762f2 pre { overflow-x: auto; padding: 1rem; border-radius: var(--radius); background: var(--surface); }
+    .c7762f2 code, .c7762f2 pre { font-family: var(--body); }
+    .c492216 { margin-block: .8rem; border: 1px solid color-mix(in srgb,var(--text) 11%,transparent); border-radius: var(--radius); background: var(--surface); overflow: hidden; }
+    .c65683c { position: relative; padding: 1.3rem 3.5rem 1.3rem 1.4rem; list-style: none; cursor: pointer; color: var(--text); font: 550 1.04rem/1.5 var(--display); }
+    .c65683c::-webkit-details-marker { display: none; }
+    .c65683c::after { content: "+"; position: absolute; right: 1.4rem; top: 1.2rem; color: var(--accent); font-size: 1.3rem; }
+    details[open] > .c65683c::after { content: "−"; }
+    .c492216[open] { border-color: color-mix(in srgb,var(--accent) 35%,var(--surface)); }
+    .c65683c:focus-visible { outline-offset: -5px; }
+    .c9581a7 { padding: 0 1.4rem 1.4rem; color: var(--muted); overflow-wrap: anywhere; }
+    .c9581a7 > :last-child { margin-bottom: 0; }
+    .caec3c6 { max-width: 820px; padding-block: 1.5rem 3.5rem; border-top: 1px solid color-mix(in srgb,var(--text) 12%,transparent); }
+    .caec3c6 .cae5d0a { font-size: 1.25rem; }
+    .c92cf7f { margin: 0; padding-left: 1.25rem; color: var(--muted); font-size: .88rem; }
+    .c1543fe { padding-block: .4rem; padding-left: .25rem; overflow-wrap: anywhere; }
+    .c1543fe a, a.c1543fe { color: var(--text); text-decoration-color: color-mix(in srgb,var(--accent) 45%,transparent); }
+    .c1543fe a:hover, a.c1543fe:hover { color: var(--accent); }
+    .c4ad47e { border-top: 1px solid color-mix(in srgb,var(--text) 10%,transparent); }
+    .c726769 { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; min-height: 96px; padding-block: 1.5rem; color: var(--muted); font-size: .8rem; }
+    .c726769 p { margin: 0; }
+    .c726769 a { color: var(--muted); }
+    @media (max-width: 850px) { .c8b81ac { grid-template-columns: minmax(0,1fr); gap: 2.5rem; padding-block: 2.5rem 3.5rem; } .c999435 { max-width: 650px; } .c8be3b7 { width: 100%; max-width: 600px; justify-self: center; } h1 { font-size: clamp(2.5rem,7vw,4rem); } .c918b08 { max-width: 60ch; } }
+    @media (max-width: 540px) { .cdd32db { width: calc(100% - 2rem); } .c40d2b7 { min-height: 76px; gap: .7rem; } .cf5f0ea { font-size: .95rem; gap: .45rem; } .c67a576 { width: 2rem; height: 2rem; } .cccb913 { gap: .6rem; } .cccb913 > a:not(.ce6934d) { display: none; } .c40d2b7 .ce6934d { padding-inline: .85rem; font-size: .8rem; } .c4f5b2a { padding: 1.25rem; } .c2ed662 th, .c2ed662 td { padding: .8rem .55rem; } .c999435 > .ce6934d { width: 100%; } .cbeed8e { padding-top: 2.8rem; } .c726769 { align-items: flex-start; flex-direction: column; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .ce6934d, .amount-field { transition: none; } .ce6934d:hover { transform: none; } }
+  </style>
 </head>
 <body>
-<div class="cdd32db">
-  <header class="c245ac9">
-    <div class="cf603dd"><span class="c181e29" aria-hidden="true">⇄</span><span>Exchange</span></div>
-    <a class="c4c0d8c" href="dashboard/">Swap <span aria-hidden="true">↗</span></a>
+  <a class="c913d5c" href="#content">Skip to content</a>
+  <header class="c7a7a04">
+    <nav class="c40d2b7 cdd32db" aria-label="Primary navigation">
+      <a class="cf5f0ea" href="#top" aria-label="Swap station, top of page">
+        <span class="c67a576" aria-hidden="true"><svg class="cbff71a" viewBox="0 0 24 24"><path d="M4 8h15m-4-4 4 4-4 4M20 16H5m4-4-4 4 4 4"/></svg></span>
+        Swap station
+      </a>
+      <div class="cccb913">
+        <a href="#facts">Key facts</a>
+        <a href="#sources">Sources</a>
+        <a class="ce6934d" href="dashboard/">Swap</a>
+      </div>
+    </nav>
   </header>
-  <div class="cd13f97"><nav class="c95a3f1" aria-label="Breadcrumb"><a href="dashboard/">Home</a> <span>/</span> <span>Swaps</span> <span>/</span> <span>SilverSwap</span></nav></div>
-  <section class="c8b81ac" aria-labelledby="hero-title">
-    <div class="c7f8250">A direct route to your next asset</div>
-    <h1 id="hero-title"><em>SilverSwap</em>.</h1>
-    <p class="caa823f">SilverSwap is a self-custody automated-market-maker exchange: you connect a wallet, pick a token pair, and trade directly against a liquidity pool instead of placing an order with a counterparty. There is no order book and no custodian holding your funds at any point. The pool sets the price from the ratio of the two tokens it holds, SilverSwap shows you the amount you will receive and the slippage tolerance before you sign, and the trade settles in one transaction that you approve and pay gas for yourself.</p>
-    <div class="c338a38" role="group" aria-labelledby="exchange-title">
-      <div class="c7c9243">
-        <h2 id="exchange-title">Your exchange</h2>
-        <p>One route. Every detail in view.</p>
+  <div class="cdd32db" id="top">
+    <div class="cf364d6"><nav class="c95a3f1" aria-label="Breadcrumb"><a href="dashboard/">Home</a> <span>/</span> <span>Swaps</span> <span>/</span> <span>SilverSwap</span></nav></div>
+    <section class="c8b81ac" aria-labelledby="hero-title">
+      <div class="c999435">
+        <p class="c7f8250">All swap routes</p>
+        <h1 id="hero-title"><em>SilverSwap</em>.</h1>
+        <p class="c918b08">SilverSwap is a self-custody automated-market-maker exchange: you connect a wallet, pick a token pair, and trade directly against a liquidity pool instead of placing an order with a counterparty.</p>
+        <a class="ce6934d" href="dashboard/">Swap <svg class="cbff71a" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
       </div>
-      <div class="c51da0b">
-        <div class="c8ca9ea">
-          <label class="c27d3fd" for="amount">You pay</label>
-          <input id="amount" name="amount" type="number" inputmode="decimal" min="1" max="1000000" step="any" value="1000" required aria-describedby="amount-help amount-message" aria-invalid="false">
-          <span class="cc5111a" id="amount-help">From 1 to 1,000,000 units</span>
+      <aside class="c8be3b7 c66523e" data-from="ETH" aria-labelledby="widget-title">
+        <div class="ccf4b0d">
+          <h2 id="widget-title">Swap</h2>
+          <span class="c606cf0">Best route</span>
         </div>
-        <div class="c4e77c5" role="group" aria-label="Exchange route">
-          <span class="cba009d"><img src="assets/tokens/eth.svg" alt="Ethereum" width="28" height="28"></span>
-          <span class="c701120" role="img" aria-label="to">→</span>
-          <span class="cba009d"><img src="assets/tokens/usdc.svg" alt="USD Coin" width="28" height="28"></span>
+        <div class="c40ad7b">
+          <div class="cfb8ab0"><span class="c27d3fd">You pay</span></div>
+          <div class="ce8ef24">
+            <input id="pay-amount" class="cfb461e" type="number" inputmode="decimal" min="0" max="1000000000" step="any" value="1" aria-label="Amount you pay">
+            <span class="c1bac26">
+              <img class="c838a61" id="pay-ico" width="22" height="22" alt="" src="assets/tokens/eth.svg">
+              <select id="pay-token" class="c670808" aria-label="Token you pay"></select>
+            </span>
+          </div>
+          <div class="c71272f" id="pay-usd">—</div>
         </div>
-        <div class="c8ca9ea c4d01b3">
-          <label class="c27d3fd" for="received">You receive</label>
-          <output id="received" for="amount" aria-live="polite" aria-atomic="true">—</output>
-          <span class="cc5111a">After network fee · destination units</span>
+        <button type="button" class="c2af422" id="swap-switch" aria-label="Switch the two tokens">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v13m0 0-3-3m3 3 3-3M17 20V7m0 0-3 3m3-3 3 3"/></svg>
+        </button>
+        <div class="c40ad7b">
+          <div class="cfb8ab0"><span class="c27d3fd">You receive</span></div>
+          <div class="ce8ef24">
+            <output id="get-amount" class="cfb461e" for="pay-amount">—</output>
+            <span class="c1bac26">
+              <img class="c838a61" id="get-ico" width="22" height="22" alt="" src="assets/tokens/usdt.svg">
+              <select id="get-token" class="c670808" aria-label="Token you receive"></select>
+            </span>
+          </div>
+          <div class="c71272f" id="get-usd">—</div>
         </div>
-      </div>
-      <div class="c9becd2">
-        <dl class="c05f441">
-          <div><dt>Rate</dt><dd><output id="rate" for="amount">—</output></dd></div>
-          <div><dt>Network fee</dt><dd><output id="network-fee" for="amount">—</output></dd></div>
+        <dl class="cf12e8d">
+          <div><dt>Rate</dt><dd id="swap-rate">—</dd></div>
+          <div><dt>Network fee</dt><dd id="swap-fee">0.3%</dd></div>
         </dl>
-        <a class="c69cb8a" href="dashboard/"><span>Swap</span><span aria-hidden="true">→</span></a>
-      </div>
-      <p class="c9b1873" id="amount-message" role="status" aria-live="polite"></p>
-    </div>
-  </section>
-  <ul class="c932fbe" aria-label="Exchange features">
-    <li>Non-custodial</li>
-    <li>On-chain</li>
-    <li>No sign-up</li>
-    <li>Transparent fees</li>
-  </ul>
-  <section class="c648f51" aria-labelledby="facts-title">
-    <h2 class="cae5d0a" id="facts-title">Key facts</h2>
-    <div class="c21943b" tabindex="0" role="region" aria-label="Key facts table"><table class="c2ed662"><tbody><tr><th scope="row">Exchange type</th><td>Self-custody automated market maker (AMM)</td></tr>
+        <noscript><p class="cf8e336">Enable JavaScript to estimate the swap.</p></noscript>
+        <a class="ce6934d" href="dashboard/">Swap <svg class="cbff71a" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+      </aside>
+    </section>
+    <section class="c4f5b2a" id="facts" aria-labelledby="facts-title">
+      <h2 class="cae5d0a" id="facts-title">Key facts</h2>
+      <div class="c21943b"><table class="c2ed662"><tbody><tr><th scope="row">Exchange type</th><td>Self-custody automated market maker (AMM)</td></tr>
 <tr><th scope="row">Pricing model</th><td>Set by pool reserve ratio, not an order book</td></tr>
 <tr><th scope="row">Custody</th><td>Non-custodial — funds stay in your wallet</td></tr>
 <tr><th scope="row">Token approval</th><td>Required once per ERC-20 before the first swap</td></tr>
 <tr><th scope="row">Swap fee</th><td>Small percentage paid to liquidity providers</td></tr>
 <tr><th scope="row">Settlement</th><td>One on-chain transaction, confirmed on Ethereum</td></tr></tbody></table></div>
-  </section>
-  <main class="c6ca8f0" id="content">
+    </section>
+  </div>
+  <main class="cbeed8e cdd32db" id="content">
     <section class="c698921"><h2 class="c877466">What SilverSwap Is</h2><div class="c7762f2"><strong>SilverSwap is a self-custody decentralized exchange that prices and settles trades through automated liquidity pools instead of matching buyers with sellers on an order book.</strong> Every pair on SilverSwap — ETH and USDC, for instance — is backed by a pool that holds both tokens, supplied by liquidity providers who earn a share of the swap fee in return. When you swap, you are not trading against another person; you are trading against that pool's reserves, and the pool's own math sets the price you get. This is the same core design documented across <a href="https://en.wikipedia.org/wiki/Automated_market_maker" rel="nofollow noopener" target="_blank">automated market makers</a> generally, and it is why a SilverSwap trade never waits for a matching order to appear.<h3>Why the pool ratio sets the price</h3>Most AMM pools, including the ones SilverSwap routes through, hold reserves of two tokens and keep their product roughly constant as trades happen. Buy more of one token and you remove it from the pool while adding the other, which shifts the ratio and pushes the price of the token you're buying upward. The bigger your trade relative to the pool's size, the more the ratio moves and the worse your effective price gets — a property usually called price impact. Reading through <a href="https://docs.uniswap.org/" rel="nofollow noopener" target="_blank">Uniswap's documentation</a> on pool mechanics explains the same constant-product curve that underlies most AMM pricing today.<h3>What liquidity providers supply</h3>Liquidity providers deposit equal value of both tokens in a pair — ETH and USDC, say — and receive a share of every swap fee charged against that pool proportional to their stake. SilverSwap itself never holds a reserve of its own; the liquidity sitting behind each pair belongs to the providers who chose to supply it, which is also why pool depth varies by pair and why deeper pools absorb larger trades with less price impact.</div></section>
 <section class="c698921"><h2 class="c877466">Connecting Your Wallet to SilverSwap</h2><div class="c7762f2">Using SilverSwap starts with connecting a self-custody wallet — nothing is created on a server and no account or password exists. Your wallet signs every action, and SilverSwap only ever requests a signature for a transaction you can read before approving it. The interface itself has no access to your keys and cannot move funds on its own; every transfer requires your explicit signature in the wallet, the same standard any Ethereum wallet implements as described on <a href="https://ethereum.org/en/defi/" rel="nofollow noopener" target="_blank">ethereum.org</a>.<h3>Token approval, explained</h3>Before SilverSwap's contract can pull an ERC-20 token out of your wallet for a swap, you must grant it an approval — a separate signed transaction that authorizes the contract to spend up to a specified amount. ETH itself needs no approval because it is sent directly with the transaction, but USDC and nearly every other ERC-20 does. A limited approval, scoped to the amount of the current swap, is safer than an unlimited one: it caps what the contract could ever move even if something in the approval chain were later compromised, and revoking an old approval you no longer use removes that exposure entirely.</div></section>
 <section class="c698921"><h2 class="c877466">SilverSwap Slippage Tolerance and Price Impact</h2><div class="c7762f2">Between the moment you submit a swap and the moment it confirms, the pool's price can move — other trades may land first, or the block you're in may simply take a few seconds to settle. Slippage tolerance is the maximum amount of that movement you're willing to accept; set it too tight and ordinary network timing can cause your swap to fail, set it too loose and a thin pool can execute you at a materially worse price than quoted. SilverSwap shows the expected output and lets you adjust the tolerance before signing, so the trade-off is visible rather than hidden.<table><thead><tr><th>Slippage setting</th><th>What it does</th><th>When to use it</th></tr></thead><tbody><tr><td>Low (0.1%–0.5%)</td><td>Rejects the swap if price moves more than that before confirmation</td><td>Deep pools, major pairs like ETH/USDC</td></tr><tr><td>Medium (0.5%–1%)</td><td>Allows normal network timing to pass without failed transactions</td><td>Typical swaps on moderately liquid pairs</td></tr><tr><td>High (above 2%)</td><td>Tolerates larger price movement, including from your own trade size</td><td>Thin pools or unusually large swap amounts</td></tr></tbody></table><h3>Why price impact grows with size</h3>Slippage tolerance protects you from price movement between signing and confirming; price impact is a separate cost that comes purely from the size of your own trade relative to the pool. A swap that is a small fraction of a pool's reserves barely moves the ratio, while a swap that is a large fraction of it can shift the price substantially in a single transaction. SilverSwap displays the estimated price impact alongside the slippage setting so you can judge, before signing, whether splitting a large trade into smaller ones would get you a better net price.</div></section>
@@ -1117,71 +241,66 @@ a.c1543fe:hover {
 <details class="c492216"><summary class="c65683c">Why did my SilverSwap swap route through more than one pool?</summary><div class="c9581a7">If no direct pool exists for your pair, SilverSwap routes the trade across two or more pools to reach the best combined price. The route and resulting quote are shown before you sign.</div></details>
 <details class="c492216"><summary class="c65683c">What fees does a SilverSwap trade include?</summary><div class="c9581a7">A swap includes the network gas paid in ETH to process the transaction and a small swap fee that goes to the liquidity providers behind the pool. Both are shown in the quote before you confirm.</div></details>
   </main>
-  <section class="c41fd1b c6ca8f0" aria-labelledby="sources-title">
+  <section class="caec3c6 cdd32db" id="sources" aria-labelledby="sources-title">
     <h2 class="cae5d0a" id="sources-title">Sources</h2>
     <ul class="c92cf7f"><li><a class="c1543fe" href="https://docs.uniswap.org/" rel="nofollow noopener" target="_blank">Uniswap documentation</a></li>
 <li><a class="c1543fe" href="https://en.wikipedia.org/wiki/Automated_market_maker" rel="nofollow noopener" target="_blank">Automated market maker — Wikipedia</a></li>
 <li><a class="c1543fe" href="https://ethereum.org/en/defi/" rel="nofollow noopener" target="_blank">Ethereum.org — DeFi</a></li>
 <li><a class="c1543fe" href="https://defillama.com/" rel="nofollow noopener" target="_blank">DefiLlama</a></li></ul>
   </section>
-  <footer class="cb8b4bb">
-    <span class="c14af0d">Exchange</span>
-    <p class="c1442ae">Updated <span>Updated Oct 10, 2026</span></p>
+  <footer class="c4ad47e">
+    <div class="c726769 cdd32db">
+      <p>Updated Oct 11, 2026</p>
+      <a href="#top">Back to top ↑</a>
+    </div>
   </footer>
-</div>
-<script>
-(() => {
-  'use strict';
-  const amount = document.getElementById('amount');
-  const received = document.getElementById('received');
-  const rateOutput = document.getElementById('rate');
-  const feeOutput = document.getElementById('network-fee');
-  const message = document.getElementById('amount-message');
-  const exchangeRate = 0.985;
-  const baseFee = 0.25;
-  const networkFactor = 0.001;
-  const formatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 6 });
-  let timer;
-
-  function clearQuote() {
-    received.value = '—';
-    rateOutput.value = '—';
-    feeOutput.value = '—';
-  }
-
-  function updateQuote() {
-    clearTimeout(timer);
-    const raw = amount.value.trim();
-    const value = amount.valueAsNumber;
-    const valid = raw !== '' && Number.isFinite(value) && value >= 1 && value <= 1000000 && !amount.validity.badInput;
-    amount.setAttribute('aria-invalid', String(!valid));
-    message.dataset.invalid = String(!valid);
-    if (!valid) {
-      clearQuote();
-      const error = 'Enter an amount from 1 to 1,000,000.';
-      amount.setCustomValidity(error);
-      message.textContent = error;
-      return;
-    }
-    amount.setCustomValidity('');
-    const networkFee = baseFee + value * networkFactor;
-    const netAmount = Math.max(0, value * exchangeRate - networkFee);
-    received.value = formatter.format(netAmount);
-    rateOutput.value = '1 → ' + formatter.format(exchangeRate);
-    feeOutput.value = formatter.format(networkFee) + ' destination units';
-    message.textContent = '';
-  }
-
-  amount.addEventListener('input', () => {
-    clearTimeout(timer);
-    amount.setCustomValidity('');
-    clearQuote();
-    timer = setTimeout(updateQuote, 200);
-  });
-  amount.addEventListener('change', updateQuote);
-  amount.addEventListener('blur', updateQuote);
-  updateQuote();
-})();
-</script>
+  <script>
+    (() => {
+      const TOKENS = [
+        { s: 'ETH', f: 'eth', p: 2550 }, { s: 'BTC', f: 'btc', p: 62000 },
+        { s: 'USDT', f: 'usdt', p: 1 }, { s: 'USDC', f: 'usdc', p: 1 },
+        { s: 'BNB', f: 'bnb', p: 585 }, { s: 'SOL', f: 'sol', p: 145 },
+        { s: 'ARB', f: 'arb', p: 0.62 }, { s: 'OP', f: 'optimism', p: 1.65 },
+        { s: 'MATIC', f: 'polygon', p: 0.42 }, { s: 'AVAX', f: 'avalanche', p: 27 },
+        { s: 'SUI', f: 'sui', p: 1.35 }, { s: 'LTC', f: 'ltc', p: 72 },
+        { s: 'TRX', f: 'trx', p: 0.16 }, { s: 'XMR', f: 'xmr', p: 155 },
+        { s: 'XRP', f: 'xrp', p: 0.52 }, { s: 'ZEC', f: 'zec', p: 32 }
+      ];
+      const FEE = 0.003;
+      const $ = (id) => document.getElementById(id);
+      const payAmt = $('pay-amount'), payTok = $('pay-token'), payUsd = $('pay-usd'), payIco = $('pay-ico');
+      const getAmt = $('get-amount'), getTok = $('get-token'), getUsd = $('get-usd'), getIco = $('get-ico');
+      const rateEl = $('swap-rate');
+      const tok = (s) => TOKENS.find((t) => t.s === s);
+      const num = (n) => new Intl.NumberFormat('en', { maximumFractionDigits: n >= 1 ? 4 : 6 }).format(n);
+      const usd = (v) => '~$' + new Intl.NumberFormat('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
+      TOKENS.forEach((t) => {
+        [payTok, getTok].forEach((sel) => { const o = document.createElement('option'); o.value = t.s; o.textContent = t.s; sel.appendChild(o); });
+      });
+      const widget = document.querySelector('.c66523e');
+      const defFrom = (widget && widget.dataset.from) || 'ETH';
+      const fromOk = TOKENS.some((t) => t.s === defFrom) ? defFrom : 'ETH';
+      payTok.value = fromOk;
+      getTok.value = (fromOk === 'USDT') ? 'ETH' : 'USDT';
+      const calc = () => {
+        const pf = tok(payTok.value), gt = tok(getTok.value);
+        payIco.src = 'assets/tokens/' + pf.f + '.svg'; payIco.alt = pf.s;
+        getIco.src = 'assets/tokens/' + gt.f + '.svg'; getIco.alt = gt.s;
+        rateEl.textContent = '1 ' + pf.s + ' ≈ ' + num(pf.p / gt.p) + ' ' + gt.s;
+        const a = parseFloat(payAmt.value);
+        if (!Number.isFinite(a) || a <= 0) { getAmt.textContent = '—'; payUsd.textContent = '—'; getUsd.textContent = '—'; return; }
+        const out = a * (pf.p / gt.p) * (1 - FEE);
+        getAmt.textContent = num(out) + ' ' + gt.s;
+        payUsd.textContent = usd(a * pf.p);
+        getUsd.textContent = usd(out * gt.p);
+      };
+      const distinct = (changed, other) => { if (changed.value === other.value) { other.value = (TOKENS.find((t) => t.s !== changed.value) || TOKENS[0]).s; } };
+      payAmt.addEventListener('input', calc);
+      payTok.addEventListener('change', () => { distinct(payTok, getTok); calc(); });
+      getTok.addEventListener('change', () => { distinct(getTok, payTok); calc(); });
+      $('swap-switch').addEventListener('click', () => { const t = payTok.value; payTok.value = getTok.value; getTok.value = t; calc(); });
+      calc();
+    })();
+  </script>
 </body>
 </html>
